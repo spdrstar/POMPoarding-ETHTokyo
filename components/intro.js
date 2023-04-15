@@ -38,7 +38,7 @@ const FullScreenLottie = ({ animationData }) => {
 
     useEffect(() => {
         if(isSecondAnimationComplete) {
-            Router.push('/safe');
+            Router.push('/onboarding');
         }
     }, [isSecondAnimationComplete])
 

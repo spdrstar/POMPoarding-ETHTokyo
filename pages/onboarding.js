@@ -1,9 +1,45 @@
+import React from "react";
 import { Form } from "@quillforms/renderer-core";
 import "@quillforms/renderer-core/build-style/style.css";
 import { registerCoreBlocks } from "@quillforms/react-renderer-utils";
+import Router, { useRouter } from 'next/router';
 
 registerCoreBlocks();
+
 const Onboarding = () => {
+
+  const imageHandler = async (quill) => {
+    const input = document.createElement('input');
+
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      const formData = new FormData();
+
+      formData.append('image', file);
+
+      // Save current cursor state
+      const range = quill.getSelection(true);
+
+      // Insert temporary loading placeholder image
+      quill.insertEmbed(range.index, 'image', `${ window.location.origin }/images/loaders/placeholder.gif`); 
+
+      // Move cursor to right side of image (easier to continue typing)
+      quill.setSelection(range.index + 1);
+
+      const res = await apiPostNewsImage(formData); // API post, returns image location as string e.g. 'http://www.example.com/images/foo.png'
+
+      // Remove placeholder image
+      quill.deleteText(range.index, 1);
+
+      // Insert uploaded image
+      quill.insertEmbed(range.index, 'image', res.body.image); 
+    }
+  }
+
   return (
     <div style={{ width: "100%", height: "100vh" }}>
       <Form
@@ -12,10 +48,21 @@ const Onboarding = () => {
           blocks: [
             {
               name: "short-text",
-              id: "name",
+              id: "firstname",
               attributes: {
                 required: true,
-                label: "Let's start with your name"
+                placeholder: "",
+                label: "Let's start with your first name"
+              }
+            },
+            
+            {
+              name: "short-text",
+              id: "lastname",
+              attributes: {
+                required: true,
+                placeholder: "",
+                label: "Hey {{field:firstname}}! What's your last name?"
               }
             },
             {
@@ -23,8 +70,9 @@ const Onboarding = () => {
               id: "orgname",
               attributes: {
                 required: true,
+                placeholder: "",
                 label:
-                  "Great {{field:name}}, what is the name of the community you lead?"
+                  "Great, what is the name of the community you lead?"
               }
             },
             {
@@ -34,7 +82,7 @@ const Onboarding = () => {
                 required: true,
                 multiple: false,
                 verticalAlign: false,
-                label: "Select the category that best fits {{field:orgname}}",
+                label: "Select the category that best fits {{field:orgname}}:",
                 choices: [
                   {
                     label: "Company",
@@ -69,7 +117,8 @@ const Onboarding = () => {
               id: "oneliner",
               attributes: {
                 required: true,
-                label: "Describe {{field:orgname}} in one sentence"
+                placeholder: "A community of 1000+ founders building the future of web3",
+                label: "Tell us what {{field:orgname}} is in one sentence:"
               }
             },
             {
@@ -77,30 +126,50 @@ const Onboarding = () => {
               id: "color",
               attributes: {
                 required: true,
-                label: "What is the best color to represent {{field:orgname}}?"
+                placeholder: "#FE9800",
+                label: "What is the best color to represent {{field:orgname}}? Use the HEX color code"
               }
             },
             {
-              name: "file-upload",
-              id: "234567",
+              id: "addadmins",
+              name: "group",
               attributes: {
-                required: true,
-                label: "Please upload a logo of your community",
-                accept: "image/svg+xml,image/png,image/jpeg"
-              }
+                description: "Any email you enter below will gain access to the admin role.",
+                label: "Invite other admins"
+              },
+              innerBlocks: [
+                {
+                  id: "asfijais1e",
+                  name: "email",
+                  attributes: {
+                    label: "",
+                    required: false,
+                    placeholder: "charles@gotpomp.com"
+                  }
+                },
+                {
+                  id: "7dsjsdv821",
+                  name: "email",
+                  attributes: {
+                    label: "",
+                    required: false,
+                    placeholder: "miya@gotpomp.com"
+                  }
+                },
+                {
+                  id: "2esad013x",
+                  name: "email",
+                  attributes: {
+                    label: "",
+                    required: false,
+                    placeholder: "liam@gotpomp.com"
+                  }
+                }
+              ]
             },
             {
-              name: "email",
-              id: "adminemail",
-              attributes: {
-                required: false,
-                label:
-                  "Enter the email of other admins so that they'll get access to the admin account. "
-              }
-            },
-            {
-              name: "multiple-choice",
               id: "allowedtoaddmembers",
+              name: "multiple-choice",
               attributes: {
                 required: true,
                 multiple: false,
@@ -108,12 +177,8 @@ const Onboarding = () => {
                 label: "Who is allowed to add and remove members?",
                 choices: [
                   {
-                    label: "All admin",
+                    label: "All admin users",
                     value: "all"
-                  },
-                  {
-                    label: "Select admin only",
-                    value: "select"
                   },
                   {
                     label: "Myself only",
@@ -127,22 +192,17 @@ const Onboarding = () => {
               }
             },
             {
-              name: "multiple-choice",
               id: "allowedtoaddadmin",
+              name: "multiple-choice",
               attributes: {
                 required: true,
                 multiple: false,
                 verticalAlign: true,
-                label:
-                  "How will admin be added or removed after account set-up?",
+                label: "How will new admin users be added or removed after account set-up?",
                 choices: [
                   {
-                    label: "Receive majority approval by admin",
+                    label: "Receive majority approval from admin users",
                     value: "majoritybyadmin"
-                  },
-                  {
-                    label: "Receive majority approval by members",
-                    value: "majoritybymembers"
                   },
                   {
                     label: "Only decided by me",
@@ -156,22 +216,14 @@ const Onboarding = () => {
               }
             },
             {
-              name: "website",
-              id: "bv91em9123",
-              attributes: {
-                required: true,
-                multiple: true,
-                label: "Please insert your website url!"
-              }
-            },
-            {
-              name: "statement",
               id: "end",
+              name: "short-text",
               attributes: {
-                label:
-                  "Great, you're all set! Submit and we'll create {{field:orgname}}'s community account",
-                buttonText: "Continue",
-                quotationMarks: true
+                required: false,
+                placeholder: "How excited are you for POMPoarding?",
+                label: "🎉 Great, you're all set! ",
+                description: "Click submit and we'll work on creating {{field:orgname}}'s community dashboard ✨",
+                buttonText: "Submit"
               }
             }
           ],
@@ -199,8 +251,9 @@ const Onboarding = () => {
         }}
         onSubmit={(data, { completeForm, setIsSubmitting }) => {
           setTimeout(() => {
-            setIsSubmitting(false);
-            completeForm();
+            setIsSubmitting(true);
+            //completeForm();
+            Router.push('/dashboard');
           }, 500);
         }}
       />
