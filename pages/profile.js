@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { UserContext } from '../lib/UserContext';
 import Loading from '../components/loading';
 import Intro from '../components/intro';
-import { Button } from "@nextui-org/react";
 
 const Profile = () => {
   const [user] = useContext(UserContext);
