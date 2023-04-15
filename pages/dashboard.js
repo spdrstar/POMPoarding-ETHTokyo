@@ -2,14 +2,21 @@ import { useContext, useEffect } from 'react';
 import { UserContext } from '../lib/UserContext';
 import { CommunityContext } from '../lib/CommunityContext';
 import Loading from '../components/loading';
+
+// Safe
 import { Magic } from 'magic-sdk';
 import { ethers } from 'ethers';
 import Safe, { EthersAdapter, SafeFactory } from '@safe-global/protocol-kit'
+//import useSafeInfo from '@/hooks/useSafeInfo'
+
+// Table Stuff
 import { Table, Row, Col, Tooltip, User, Text } from "@nextui-org/react";
 import { StyledBadge } from "../components/table/styledbadge";
 import { IconButton } from "../components/table/iconbutton";
 import { EyeIcon } from "../components/table/eyeicon";
 import { DeleteIcon } from "../components/table/deleteicon";
+
+
 
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +39,7 @@ const handleSubmit = async (e) => {
 const Dashboard = () => {
   const [user] = useContext(UserContext);
   const [community] = useContext(CommunityContext);
+  //const { safe, safeLoaded } = useSafeInfo()
 
   const columns = [
     { name: "NAME", uid: "name" },
@@ -113,34 +121,34 @@ const Dashboard = () => {
     storeCommunity();
   }, []);
 
-//   useEffect(() => {
-//     // Define an asynchronous function inside the useEffect hook
-//     const createSafe = async () => {
-//       // If user is loaded in, create a Safe
-//       if (user?.issuer) {
-//         // Connect to Magic
-//         const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook
+    const createSafe = async () => {
+      // If user is loaded in, create a Safe
+      if (user?.issuer) {
+        // Connect to Magic
+        const magic = new Magic(process.env.NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY);
   
-//         // Connect to wallet provider and signer with Ethers
-//         const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
-//         const signerWallet = provider.getSigner(); //2
-//         const ethAdapter = new EthersAdapter({
-//           ethers,
-//           signerOrProvider: signerWallet,
-//         }); //3
+        // Connect to wallet provider and signer with Ethers
+        const provider = new ethers.providers.Web3Provider(magic.rpcProvider);
+        const signerWallet = provider.getSigner(); //2
+        const ethAdapter = new EthersAdapter({
+          ethers,
+          signerOrProvider: signerWallet,
+        }); //3
   
-//         // Use Safe to create a Safe
-//         const safeFactory = await SafeFactory.create({ ethAdapter }); //4
-//         const safeSdk = await safeFactory.deploySafe({
-//           safeAccountConfig: { threshold: 1, owners: [await signerWallet.getAddress()] },
-//         }); //5
-//         console.log(safeSdk);
-//       }
-//     };
+        // Use Safe to create a Safe
+        const safeFactory = await SafeFactory.create({ ethAdapter }); //4
+        const safeSdk = await safeFactory.deploySafe({
+          safeAccountConfig: { threshold: 1, owners: [await signerWallet.getAddress()] },
+        }); //5
+        console.log(safeSdk);
+      }
+    };
   
-//     // Call the asynchronous function
-//     createSafe();
-//   }, [user]);
+    // Call the asynchronous function
+    createSafe();
+  }, [user]);
   
   console.log(user)
   console.log(community)
