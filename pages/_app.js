@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { UserContext } from '../lib/UserContext';
+import { CommunityContext } from "../lib/CommunityContext";
 import Router from 'next/router';
 import { magic } from '../lib/magic';
 import Layout from '../components/layout';
@@ -21,6 +22,7 @@ const theme = createTheme({
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState();
+  const [community, setCommunity] = useState();
 
   // If isLoggedIn is true, set the UserContext with user data
   // Otherwise, redirect to /login and set UserContext to { user: null }
@@ -40,9 +42,11 @@ function MyApp({ Component, pageProps }) {
     <NextUIProvider theme={theme}>
       <ThemeProvider root>
         <UserContext.Provider value={[user, setUser]}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <CommunityContext.Provider value={[community, setCommunity]}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CommunityContext.Provider >
         </UserContext.Provider>
       </ThemeProvider>
     </NextUIProvider >

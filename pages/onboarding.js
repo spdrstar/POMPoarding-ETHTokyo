@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Form } from "@quillforms/renderer-core";
 import "@quillforms/renderer-core/build-style/style.css";
 import { registerCoreBlocks } from "@quillforms/react-renderer-utils";
 import Router, { useRouter } from 'next/router';
+import { CommunityContext } from '../lib/CommunityContext';
+import { UserContext } from '../lib/UserContext';
 
 registerCoreBlocks();
 
 const Onboarding = () => {
+
+  const [user, setUser] = useContext(UserContext);
+  const [community, setCommunity] = useContext(CommunityContext);
 
   const imageHandler = async (quill) => {
     const input = document.createElement('input');
@@ -139,7 +144,7 @@ const Onboarding = () => {
               },
               innerBlocks: [
                 {
-                  id: "asfijais1e",
+                  id: "owner2",
                   name: "email",
                   attributes: {
                     label: "",
@@ -148,7 +153,7 @@ const Onboarding = () => {
                   }
                 },
                 {
-                  id: "7dsjsdv821",
+                  id: "owner3",
                   name: "email",
                   attributes: {
                     label: "",
@@ -157,7 +162,7 @@ const Onboarding = () => {
                   }
                 },
                 {
-                  id: "2esad013x",
+                  id: "owner4",
                   name: "email",
                   attributes: {
                     label: "",
@@ -216,7 +221,7 @@ const Onboarding = () => {
               }
             },
             {
-              id: "end",
+              id: "feedback",
               name: "short-text",
               attributes: {
                 required: false,
@@ -252,7 +257,13 @@ const Onboarding = () => {
         onSubmit={(data, { completeForm, setIsSubmitting }) => {
           setTimeout(() => {
             setIsSubmitting(true);
-            //completeForm();
+            var answers = data.answers;
+            Object.entries(answers).forEach(([key, value]) => {
+                setCommunity(prevAnswers => ({
+                    ...prevAnswers,
+                    [key]: value.value
+                }));
+            })
             Router.push('/dashboard');
           }, 500);
         }}

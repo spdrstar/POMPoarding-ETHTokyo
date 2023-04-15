@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { UserContext } from '../lib/UserContext';
+import { CommunityContext } from '../lib/CommunityContext';
 import Loading from '../components/loading';
 import { Magic } from 'magic-sdk';
 import { ethers } from 'ethers';
@@ -13,6 +14,7 @@ import Safe, { EthersAdapter, SafeFactory } from '@safe-global/protocol-kit'
 
 const Dashboard = () => {
   const [user] = useContext(UserContext);
+  const [community] = useContext(CommunityContext);
 
 //   useEffect(() => {
 //     // Define an asynchronous function inside the useEffect hook
@@ -43,6 +45,8 @@ const Dashboard = () => {
 //     createSafe();
 //   }, [user]);
   
+  console.log(user)
+  console.log(community)
 
   return (
     <>
@@ -59,6 +63,7 @@ const Dashboard = () => {
 
             <div className='label'>User Address</div>
             <div className='profile-info'>{user.publicAddress}</div>
+
           </>
         )
     )}
