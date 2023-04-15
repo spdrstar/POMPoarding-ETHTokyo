@@ -1,24 +1,30 @@
 {
-  "name": "magic-nextjs",
+  "name": "pompoarding-ethtokyo",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
     "@magic-ext/oauth": "^0.7.0",
     "@magic-sdk/admin": "1.3.0",
     "@magiclabs/ui": "0.6.1",
     "@nextui-org/react": "^1.0.0-beta.12",
+    "@quillforms/blocklib-date-block": "^3.0.21",
+    "@quillforms/react-renderer-utils": "5.2.0",
+    "@quillforms/renderer-core": "5.2.0",
     "@safe-global/protocol-kit": "^0.1.1",
     "@safe-global/safe-core-sdk-types": "^1.10.1",
+    "babel-loader": "^9.1.2",
     "ethers": "5.7.2",
     "lottie-web": "^5.11.0",
     "magic-sdk": "^4.0.0",
     "next": "latest",
     "postcss": "^8.4.21",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sharp": "^0.32.0"
   },
   "license": "MIT",

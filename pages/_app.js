@@ -6,6 +6,7 @@ import Layout from '../components/layout';
 import { ThemeProvider } from '@magiclabs/ui';
 import '@magiclabs/ui/dist/cjs/index.css';
 import { createTheme, NextUIProvider } from '@nextui-org/react'
+import "./styles.css";
 
 const theme = createTheme({
   type: "light", // it could be "light" or "dark"
