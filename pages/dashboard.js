@@ -6,6 +6,19 @@ import { Magic } from 'magic-sdk';
 import { ethers } from 'ethers';
 import Safe, { EthersAdapter, SafeFactory } from '@safe-global/protocol-kit'
 
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    const objectToInsert = { name, email };
+    const response = await fetch('/api/addObject', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(objectToInsert),
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
 // Use Quicknode RPC
 // const customNodeOptions = {
 //     rpcUrl: 'https://rpc.sepolia.org', // Your own node URL
@@ -15,6 +28,23 @@ import Safe, { EthersAdapter, SafeFactory } from '@safe-global/protocol-kit'
 const Dashboard = () => {
   const [user] = useContext(UserContext);
   const [community] = useContext(CommunityContext);
+
+  // Store the data
+  useEffect(() => {
+    const storeCommunity = async () => {
+      const communityObject = { user, community };
+      const response = await fetch('/api/storeCommunity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(communityObject),
+      });
+      const data = await response.json();
+      console.log(data);
+    };
+
+    // Call the asynchronous function
+    storeCommunity();
+  }, []);
 
 //   useEffect(() => {
 //     // Define an asynchronous function inside the useEffect hook

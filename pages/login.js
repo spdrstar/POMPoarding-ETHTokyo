@@ -8,13 +8,30 @@ const Front = () => {
   const [disabled, setDisabled] = useState(false);
   const [user, setUser] = useContext(UserContext);
 
-  // Redirec to /profile if the user is logged in
+  // Redirect to /profile if the user is logged in
   useEffect(() => {
-    user?.issuer && Router.push('/profile');
+    const checkEmail = async () => {
+      const email = user.email;
+      const checkEmailRes = await fetch('/api/findCommunityByEmail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const checkEmailData = await checkEmailRes.json();
+  
+      // Redirect to the dashboard if the email exists, otherwise continue to profile
+      if (checkEmailData.objects && checkEmailData.objects.length > 0) {
+        Router.push('/dashboard');
+      } else {
+        Router.push('/profile');
+      }
+    }
+    user?.email && checkEmail();
+    //user?.issuer && Router.push('/profile');
   }, [user]);
 
   async function handleLoginWithEmail(email) {
-    console.log("ran")
+    console.log("ran");
     try {
       setDisabled(true); // disable login button to prevent multiple emails from being triggered
 
@@ -37,7 +54,21 @@ const Front = () => {
         // Set the UserContext to the now logged in user
         let userMetadata = await magic.user.getMetadata();
         await setUser(userMetadata);
-        Router.push('/profile');
+
+        // Check if the email exists in the database
+        const checkEmailRes = await fetch('/api/findCommunityByEmail', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const checkEmailData = await checkEmailRes.json();
+
+        // Redirect to the dashboard if the email exists, otherwise continue to profile
+        if (checkEmailData.objects && checkEmailData.objects.length > 0) {
+          Router.push('/dashboard');
+        } else {
+          Router.push('/profile');
+        }
       }
     } catch (error) {
       setDisabled(false); // re-enable login button - user may have requested to edit their email
