@@ -14,6 +14,7 @@ const Front = () => {
   }, [user]);
 
   async function handleLoginWithEmail(email) {
+    console.log("ran")
     try {
       setDisabled(true); // disable login button to prevent multiple emails from being triggered
 
@@ -45,8 +46,8 @@ const Front = () => {
   }
 
   return (
-    <div className='login'>
-      <Login onEmailSubmit={handleLoginWithEmail} />
+    <div>
+      <Login onEmailSubmit={handleLoginWithEmail} disabled={disabled} />
     </div>
   );
 };

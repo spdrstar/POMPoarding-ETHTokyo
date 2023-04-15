@@ -3,7 +3,7 @@ import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import { Icon, MonochromeIcons, CallToAction } from '@magiclabs/ui';
 import { Mail } from "./Mail";
 
-const Login = ({ onEmailSubmit }) => {
+const Login = ({ onEmailSubmit, disabled }) => {
   const [visible, setVisible] = React.useState(true);
   const [email, setEmail] = useState('');
 
@@ -11,8 +11,8 @@ const Login = ({ onEmailSubmit }) => {
     if(e) {
         e.preventDefault();
         onEmailSubmit(email);
-        setVisible(false);
-        console.log("closed");
+        //setVisible(false);
+        //console.log("closed");
     }
   };
 
@@ -48,6 +48,7 @@ const Login = ({ onEmailSubmit }) => {
             color='primary'
             size='sm'
             onClick={handleSubmit}
+            disabled={disabled}
           >
             Send Magic Link
           </CallToAction>

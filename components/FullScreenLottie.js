@@ -1,4 +1,3 @@
-import loading from '../public/loading.json';
 import React, { useEffect, useRef } from 'react';
 import lottie from 'lottie-web';
 
@@ -9,7 +8,7 @@ const FullScreenLottie = ({ animationData }) => {
     const animation = lottie.loadAnimation({
       container: containerRef.current,
       renderer: 'svg',
-      loop: true,
+      loop: false,
       autoplay: true,
       animationData: animationData,
       rendererSettings: {
@@ -36,8 +35,4 @@ const FullScreenLottie = ({ animationData }) => {
   );
 };
 
-const Loading = () => {
-  return <FullScreenLottie animationData={loading} />;
-};
-
-export default Loading;
+export default FullScreenLottie;
