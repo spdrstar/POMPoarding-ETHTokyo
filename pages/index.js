@@ -5,7 +5,13 @@ import Loading from '../components/loading';
 const Home = () => {
   const [user] = useContext(UserContext);
 
-  return <>{user?.loading ? <Loading /> : user?.issuer && <div>You're logged in!</div>}</>;
+  useEffect(() => {
+    if(user?.issuer) {
+      Router.push('/profile')
+    }
+  }, [user])
+
+  return <>{user?.loading ? <Loading /> : user?.issuer && <div>Thank you! Next</div>}</>;
 };
 
 export default Home;

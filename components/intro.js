@@ -3,10 +3,12 @@ import lottie from 'lottie-web';
 import intro from '../public/intro.json';
 import outro from '../public/outro.json';
 import { Button } from "@nextui-org/react";
+import Router, { useRouter } from 'next/router';
 
 const FullScreenLottie = ({ animationData }) => {
     const containerRef = useRef();
     const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+    const [isSecondAnimationComplete, setSecondAnimationComplete] = useState(false);
     const [currentAnimation, setCurrentAnimation] = useState(intro);
     const [isSecondAnimationPlaying, setIsSecondAnimationPlaying] = useState(false);
   
@@ -23,6 +25,9 @@ const FullScreenLottie = ({ animationData }) => {
       });
   
       animation.addEventListener('complete', () => {
+          if(isAnimationComplete) {
+            setSecondAnimationComplete(true);
+          }
           setIsAnimationComplete(true);
       });
   
@@ -30,6 +35,12 @@ const FullScreenLottie = ({ animationData }) => {
         animation.destroy();
       };
     }, [currentAnimation]);
+
+    useEffect(() => {
+        if(isSecondAnimationComplete) {
+            Router.push('/safe');
+        }
+    }, [isSecondAnimationComplete])
 
     const handleButtonClick = () => {
         setCurrentAnimation(outro);
