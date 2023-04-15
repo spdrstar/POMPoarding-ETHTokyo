@@ -12,6 +12,7 @@
     "@nextui-org/react": "^1.0.0-beta.12",
     "magic-sdk": "^4.0.0",
     "next": "latest",
+    "postcss": "^8.4.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "sharp": "^0.32.0"
